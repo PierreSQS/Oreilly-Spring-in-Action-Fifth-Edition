@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(controllers = HomeController.class)
+import com.pierrot.demo.tacos.web.DesignTacoController;
+
+@WebMvcTest(controllers = {HomeController.class, DesignTacoController.class})
 class TacoCloudApplicationTests {
 	
 	@Autowired
@@ -23,6 +25,14 @@ class TacoCloudApplicationTests {
 		.andExpect(status().isOk())
 		.andExpect(view().name("home"))
 		.andExpect(content().string(containsString("Welcome to...")));
+	}
+
+	@Test
+	void testShowDesignForm() throws Exception {
+		mockMvc.perform(get("/design"))
+		.andExpect(status().isOk())
+		.andExpect(view().name("design"))
+		.andExpect(content().string(containsString("Design your taco")));
 	}
 
 }
