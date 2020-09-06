@@ -52,7 +52,17 @@ class TacoCloudApplicationTests {
 
 	@Test
 	void testOrderForm_OrderController() throws Exception {
-		mockMvc.perform(get("/orders/current"))
+		mockMvc.perform(get("/orders/current")
+				.param("name", "Top Gun"))
+		.andExpect(model().attributeExists("order"))
+		.andExpect(status().isOk())
+		.andExpect(view().name("orderForm"))
+		.andExpect(content().string(containsString("Design another taco")));
+	}
+
+	@Test
+	void testProcessOrder_OrderController() throws Exception {
+		mockMvc.perform(get("/orders"))
 		.andExpect(model().attributeExists("order"))
 		.andExpect(status().isOk())
 		.andExpect(view().name("orderForm"))
