@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.pierrot.demo.tacos.Order;
 
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Controller
 @RequestMapping("/orders")
 public class OrderController {
@@ -19,9 +21,10 @@ public class OrderController {
 		return "orderForm";
 	}
 	
-	@PostMapping("/orders")
+	@PostMapping
 	public String processOrder(Order order) {
-		return null;
+		log.info("Order submitted: "+ order);
+		return "redirect:/";
 	}
 
 }

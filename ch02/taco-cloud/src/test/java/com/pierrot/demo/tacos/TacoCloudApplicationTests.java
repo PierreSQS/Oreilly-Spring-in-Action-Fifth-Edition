@@ -58,12 +58,12 @@ class TacoCloudApplicationTests {
 		.andExpect(status().isOk())
 		.andExpect(view().name("orderForm"))
 		.andExpect(content().string(containsString("Design another taco")));
+//		.andDo(print()); // to print the Results by all means
 	}
 
 	@Test
 	void testProcessOrder_OrderController() throws Exception {
-		mockMvc.perform(get("/orders"))
-		.andExpect(model().attributeExists("order"))
+		mockMvc.perform(post("/orders"))
 		.andExpect(status().isOk())
 		.andExpect(view().name("orderForm"))
 		.andExpect(content().string(containsString("Design another taco")));
