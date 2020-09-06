@@ -7,12 +7,16 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.pierrot.demo.tacos.Ingredient;
 import com.pierrot.demo.tacos.Ingredient.Type;
 import com.pierrot.demo.tacos.Taco;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 @RequestMapping("/design")
 public class DesignTacoController {
@@ -40,6 +44,15 @@ public class DesignTacoController {
 		});
 		model.addAttribute("design", new Taco());
 		return "design";
+	}
+	
+	@PostMapping
+	public String processDesign(Taco design) {
+		// this Request-Handler will be implemented
+		// in chapter3
+		log.info("Processing Taco "+design+"...");
+		// ... code for Handling submitted Taco...
+		return "redirect:/orders/current";
 	}
 	
 	private List<Ingredient> filterByType(List<Ingredient> ingredients, Type type) {
