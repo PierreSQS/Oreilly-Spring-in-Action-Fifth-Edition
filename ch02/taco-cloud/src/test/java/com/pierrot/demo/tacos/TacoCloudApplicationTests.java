@@ -41,8 +41,8 @@ class TacoCloudApplicationTests {
 
 	@Test
 	void testShowDesignForm_DesignTacoController() throws Exception {
-		mockMvc.perform(post("/design"))
-//				.param("name", "Top Gun")) // not for this form
+		mockMvc.perform(post("/design")
+				.param("name", "Top Gun"))
 		.andExpect(status().is3xxRedirection())
 //		.andReturn() // to check what assertion does
 		.andExpect(view().name("redirect:/orders/current"))
@@ -53,7 +53,7 @@ class TacoCloudApplicationTests {
 	@Test
 	void testOrderForm_OrderController() throws Exception {
 		mockMvc.perform(get("/orders/current")
-				.param("name", "Top Gun"))
+				.param("name", "Top Gun Order")) // To Check was is going on
 		.andExpect(model().attributeExists("order"))
 		.andExpect(status().isOk())
 		.andExpect(view().name("orderForm"))
