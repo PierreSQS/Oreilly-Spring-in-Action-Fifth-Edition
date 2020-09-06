@@ -64,8 +64,8 @@ class TacoCloudApplicationTests {
 	@Test
 	void testProcessOrder_OrderController() throws Exception {
 		mockMvc.perform(post("/orders"))
-		.andExpect(status().isOk())
-		.andExpect(view().name("orderForm"))
-		.andExpect(content().string(containsString("Design another taco")));
+		.andExpect(status().is3xxRedirection())
+		.andExpect(view().name("redirect:/"))
+		.andExpect(content().string(containsString("")));
 	}
 }
