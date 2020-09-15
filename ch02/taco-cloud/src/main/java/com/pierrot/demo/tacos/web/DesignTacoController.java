@@ -2,7 +2,8 @@ package com.pierrot.demo.tacos.web;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
+import static java.util.stream.Collectors.groupingBy;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,12 +37,13 @@ public class DesignTacoController {
 				new Ingredient("SRCR", "Sour Cream", Type.SAUCE)
 		);
 		
-		Type[] types = Ingredient.Type.values();
+		// Group the ingredients by type in a list, and put the results in a list
+		Map<Type, List<Ingredient>> ingredientsByType =
+				ingredients.stream().collect(groupingBy(Ingredient::getType));
 		
-		Arrays.asList(types).forEach(type -> {
-			model.addAttribute(type.toString().toLowerCase(), 
-					           filterByType(ingredients, type));
-		});
+		// iterate through the Map and set the model attributes
+		ingredientsByType.forEach((type, ingredList)-> {model.addAttribute(type.toString().toLowerCase(),ingredList);});
+		
 		model.addAttribute("design", new Taco());
 		return "design";
 	}
@@ -53,12 +55,6 @@ public class DesignTacoController {
 		log.info("Processing Taco "+design+"...");
 		// ... code for Handling submitted Taco...
 		return "redirect:/orders/current";
-	}
-	
-	private List<Ingredient> filterByType(List<Ingredient> ingredients, Type type) {
-		return ingredients.stream()
-				.filter(ingr -> ingr.getType().equals(type))
-				.collect(Collectors.toList());
 	}
 
 }
