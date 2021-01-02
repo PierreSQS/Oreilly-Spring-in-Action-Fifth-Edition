@@ -31,25 +31,25 @@ public class DesignTacoController {
 
 	@GetMapping
 	public String showDesignForm(Model model) {
+		// fetch the ingredients from the Database
 		List<Ingredient> ingredients = (List<Ingredient>) ingredientRepo.findAll();
 		
-		// Group the ingredients by type in a list, and put the results in a list
+		// Group the ingredients by type in a list, and put the results in a Map
 		Map<Type, List<Ingredient>> ingredientsByType =
 				ingredients.stream().collect(groupingBy(Ingredient::getType));
 		
-		// iterate through the Map and set the model attributes
+		// iterate through the Map and set the model attributes for the checkbox
 		ingredientsByType.forEach((type, ingredList)-> {model.addAttribute(type.toString().toLowerCase(),ingredList);});
 		
+		// set the model attribute for the taco design
 		model.addAttribute("design", new Taco());
 		return "design";
 	}
 	
 	@PostMapping
 	public String processDesign(Taco design) {
-		// this Request-Handler will be implemented
-		// in chapter3
-		log.info("Processing Taco "+design+"...");
-		// ... code for Handling submitted Taco...
+		log.info("Processing Taco {}...", design);
+		// Handling the submitted Taco Design...
 		return "redirect:/orders/current";
 	}
 
