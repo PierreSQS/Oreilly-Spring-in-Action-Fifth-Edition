@@ -28,7 +28,7 @@ public class IngredientByIdConverter implements Converter<String, Ingredient> {
 
 	@Override
 	public Ingredient convert(String id) {
-		return ingreRepo.findOne(id);
+		return ingreRepo.findById(id);
 	}
 
 }

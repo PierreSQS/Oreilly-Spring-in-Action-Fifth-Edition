@@ -30,7 +30,7 @@ public class JdbcIngredientRepository implements IngredientRepository {
 	}
 
 	@Override
-	public Ingredient findOne(String id) {
+	public Ingredient findById(String id) {
 		return jdbcTemp.queryForObject("select * from Ingredient Ing where Ing.id = ?", this.rowMapper, id);
 	}
 
