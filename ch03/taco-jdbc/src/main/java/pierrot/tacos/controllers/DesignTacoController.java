@@ -45,19 +45,20 @@ public class DesignTacoController {
 		ingredientsByType.forEach((type, ingredList)-> {model.addAttribute(type.toString().toLowerCase(),ingredList);});
 		
 		// set the model attribute for the taco design
-		model.addAttribute("design", new Taco());
+		model.addAttribute("taco", new Taco());
 		return "design";
 	}
 	
 	@PostMapping
-	public String processDesign(@Valid Taco design, Errors error) {
-		log.info("Processing Taco {}...", design);
+	public String processDesign(@Valid Taco taco, Errors error) {
 
 		if (error.hasErrors()) {
+			log.info("Error Handling in processing Taco {}", taco);
 			return "design";
 		}
 
 		// Handling the submitted Taco Design...
+		log.info("Processing Taco {}...", taco);
 		return "redirect:/orders/current";
 	}
 
