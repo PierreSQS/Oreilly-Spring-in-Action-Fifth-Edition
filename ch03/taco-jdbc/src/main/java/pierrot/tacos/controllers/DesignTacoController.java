@@ -11,12 +11,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import lombok.extern.slf4j.Slf4j;
 import pierrot.tacos.domain.Ingredient;
 import pierrot.tacos.domain.Ingredient.Type;
+import pierrot.tacos.domain.Order;
 import pierrot.tacos.domain.Taco;
 import pierrot.tacos.repositories.IngredientRepository;
 
@@ -26,12 +28,26 @@ import pierrot.tacos.repositories.IngredientRepository;
 public class DesignTacoController {
 	
 	private final IngredientRepository ingredientRepo;
-
+	
 	public DesignTacoController(IngredientRepository ingredientRepo) {
 		super();
 		this.ingredientRepo = ingredientRepo;
 	}
-
+	
+	@ModelAttribute(name = "order")
+	public Order order() {
+		log.info("ModeAttribute Order");
+		return new Order();
+	}
+	
+	// this replace the formal ModelAttribute
+	// in the controller
+	@ModelAttribute(name = "taco")
+	public Taco taco() {
+		log.info("ModeAttribute Taco");
+		return new Taco();
+	}
+	  
 	@GetMapping
 	public String showDesignForm(Model model) {
 		// fetch the ingredients from the Database
@@ -44,8 +60,6 @@ public class DesignTacoController {
 		// iterate through the Map and set the model attributes for the checkbox
 		ingredientsByType.forEach((type, ingredList)-> {model.addAttribute(type.toString().toLowerCase(),ingredList);});
 		
-		// set the model attribute for the taco design
-		model.addAttribute("taco", new Taco());
 		return "design";
 	}
 	
