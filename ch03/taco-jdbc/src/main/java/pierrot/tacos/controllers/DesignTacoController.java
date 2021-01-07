@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import lombok.extern.slf4j.Slf4j;
 import pierrot.tacos.domain.Ingredient;
@@ -25,6 +26,7 @@ import pierrot.tacos.repositories.TacoRepository;
 
 @Slf4j
 @Controller
+@SessionAttributes("order")
 @RequestMapping("/design")
 public class DesignTacoController {
 	
@@ -69,7 +71,7 @@ public class DesignTacoController {
 	}
 	
 	@PostMapping
-	public String processDesign(@Valid Taco taco, Errors error) {
+	public String processDesign(@Valid Taco taco, Errors error, @ModelAttribute Order order) {
 
 		if (error.hasErrors()) {
 			log.info("Error Handling in processing Taco {}", taco);
@@ -79,6 +81,7 @@ public class DesignTacoController {
 		// Handling the submitted Taco Design...
 		log.info("Processing Taco {}...", taco);
 		tacoRepo.save(taco);
+		order.addTacoDesign(taco);
 		return "redirect:/orders/current";
 	}
 
