@@ -41,7 +41,7 @@ public class JdbcTacoRepository implements TacoRepository {
 		taco.setCreatedAt(LocalDateTime.now());
 		Map<String, Object> params = new HashMap<>();
 		params.put("name", taco.getName());
-		params.put("createAt", taco.getCreatedAt());
+		params.put("createdAt", taco.getCreatedAt());
 		Number newId = insertTaco.executeAndReturnKey(params);
 		return newId.longValue();
 	}
