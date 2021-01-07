@@ -21,6 +21,7 @@ import pierrot.tacos.domain.Ingredient.Type;
 import pierrot.tacos.domain.Order;
 import pierrot.tacos.domain.Taco;
 import pierrot.tacos.repositories.IngredientRepository;
+import pierrot.tacos.repositories.TacoRepository;
 
 @Slf4j
 @Controller
@@ -29,14 +30,17 @@ public class DesignTacoController {
 	
 	private final IngredientRepository ingredientRepo;
 	
-	public DesignTacoController(IngredientRepository ingredientRepo) {
+	private final TacoRepository tacoRepo;
+	
+	public DesignTacoController(IngredientRepository ingredientRepo, TacoRepository tacoRepo) {
 		super();
 		this.ingredientRepo = ingredientRepo;
+		this.tacoRepo = tacoRepo;
 	}
 	
 	@ModelAttribute(name = "order")
 	public Order order() {
-		log.info("ModeAttribute Order");
+		log.info("creating ModeAttribute Order");
 		return new Order();
 	}
 	
@@ -44,7 +48,7 @@ public class DesignTacoController {
 	// in the controller
 	@ModelAttribute(name = "taco")
 	public Taco taco() {
-		log.info("ModeAttribute Taco");
+		log.info("creating ModeAttribute Taco");
 		return new Taco();
 	}
 	  
@@ -58,7 +62,8 @@ public class DesignTacoController {
 				ingredients.stream().collect(groupingBy(Ingredient::getType));
 		
 		// iterate through the Map and set the model attributes for the checkbox
-		ingredientsByType.forEach((type, ingredList)-> {model.addAttribute(type.toString().toLowerCase(),ingredList);});
+		ingredientsByType.forEach((type, ingredList) 
+				-> {model.addAttribute(type.toString().toLowerCase(),ingredList);});
 		
 		return "design";
 	}
@@ -73,6 +78,7 @@ public class DesignTacoController {
 
 		// Handling the submitted Taco Design...
 		log.info("Processing Taco {}...", taco);
+		tacoRepo.save(taco);
 		return "redirect:/orders/current";
 	}
 
