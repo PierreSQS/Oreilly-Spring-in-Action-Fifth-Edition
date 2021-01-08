@@ -72,6 +72,7 @@ public class DesignTacoController {
 	
 	@PostMapping
 	public String processDesign(@Valid Taco taco, Errors error, @ModelAttribute Order order) {
+		log.info("Processing Taco {}...", taco);
 
 		if (error.hasErrors()) {
 			log.info("Error Handling in processing Taco {}", taco);
@@ -79,9 +80,9 @@ public class DesignTacoController {
 		}
 
 		// Handling the submitted Taco Design...
-		log.info("Processing Taco {}...", taco);
 		tacoRepo.save(taco);
 		order.addTacoDesign(taco);
+		log.info("Submtting Taco {}...", taco);
 		return "redirect:/orders/current";
 	}
 
