@@ -22,9 +22,7 @@ import pierrot.tacos.repositories.OrderRepository;
 @RequestMapping("/orders")
 public class OrderController {
 	
-	private final OrderRepository orderRepo;
-	
-	
+	private final OrderRepository orderRepo;	
 	
 	public OrderController(OrderRepository orderRepo) {
 		super();
