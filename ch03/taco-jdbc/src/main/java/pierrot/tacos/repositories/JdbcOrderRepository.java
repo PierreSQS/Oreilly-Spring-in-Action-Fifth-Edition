@@ -24,8 +24,9 @@ public class JdbcOrderRepository implements OrderRepository {
 
 	public JdbcOrderRepository(JdbcTemplate jdbcTemp) {
 		this.jdbcTemp = jdbcTemp;
-		insertOrder = new SimpleJdbcInsert(jdbcTemp).withTableName("Taco_Order").usingGeneratedKeyColumns("id");
-
+		insertOrder = new SimpleJdbcInsert(jdbcTemp)
+				.withTableName("Taco_Order")
+				.usingGeneratedKeyColumns("id");
 
 		objMapper = new ObjectMapper();
 	}
@@ -34,6 +35,7 @@ public class JdbcOrderRepository implements OrderRepository {
 	public Order save(Order order) {
 		order.setPlacedAt(LocalDateTime.now());
 		long orderId = saveOrder(order);
+		order.setId(orderId);
 		order.getTacos().forEach(taco -> saveTaco(orderId, taco.getId()));
 		return order;
 	}
