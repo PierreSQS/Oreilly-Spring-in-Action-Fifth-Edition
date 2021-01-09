@@ -52,19 +52,22 @@ class DesignTacoControllerTest {
 	@Test
 	void testShowDesignFormWithoutModelAttributes() throws Exception {
 		mockMvc.perform(get("/design"))
+//                    .andDo(print())
 		              .andExpect(status().isOk())
 		              .andExpect(content().string(containsString("<title>Taco Cloud JDBC</title>")))
 		              .andExpect(view().name("design"));
-//		              .andDo(print());
 	}
 	
 	@Test
 	void testProcessTacoDesignWithoutIngredients() throws Exception {
 		mockMvc.perform(post("/design"))		
 		              .andDo(print())
+		              // Show design view since no Ingredients checked
 		              .andExpect(view().name("design"))
+		              // We display the title of the design view
 		              .andExpect(content().string(containsString("<title>Taco Cloud JDBC</title>")))
-		              .andExpect(content().string(containsString("You must choose at least 1 ingredient")));
+		              // Display the error message since no Ingredient
+		              .andExpect(content().string(containsString("You must choose at least 1 ingredient"))); 
 	}
 
 }
