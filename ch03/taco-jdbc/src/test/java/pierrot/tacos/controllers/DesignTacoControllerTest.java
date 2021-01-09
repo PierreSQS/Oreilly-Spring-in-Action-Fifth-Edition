@@ -3,6 +3,7 @@ package pierrot.tacos.controllers;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -49,12 +50,21 @@ class DesignTacoControllerTest {
 	}
 
 	@Test
-	void testShowDesignForm() throws Exception {
+	void testShowDesignFormWithoutModelAttributes() throws Exception {
 		mockMvc.perform(get("/design"))
 		              .andExpect(status().isOk())
 		              .andExpect(content().string(containsString("<title>Taco Cloud JDBC</title>")))
+		              .andExpect(view().name("design"));
+//		              .andDo(print());
+	}
+	
+	@Test
+	void testProcessTacoDesignWithoutIngredients() throws Exception {
+		mockMvc.perform(post("/design"))		
+		              .andDo(print())
 		              .andExpect(view().name("design"))
-		              .andDo(print());
+		              .andExpect(content().string(containsString("<title>Taco Cloud JDBC</title>")))
+		              .andExpect(content().string(containsString("You must choose at least 1 ingredient")));
 	}
 
 }
