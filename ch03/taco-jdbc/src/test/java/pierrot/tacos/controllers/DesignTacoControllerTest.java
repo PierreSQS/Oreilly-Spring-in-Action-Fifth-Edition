@@ -52,7 +52,7 @@ class DesignTacoControllerTest {
 	void testShowDesignForm() throws Exception {
 		mockMvc.perform(get("/design"))
 		              .andExpect(status().isOk())
-		              .andExpect(content().string(containsString("<title>Taco Cloud</title>")))
+		              .andExpect(content().string(containsString("<title>Taco Cloud JDBC</title>")))
 		              .andExpect(view().name("design"))
 		              .andDo(print());
 	}
