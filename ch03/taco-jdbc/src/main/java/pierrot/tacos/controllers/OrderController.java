@@ -35,7 +35,7 @@ public class OrderController {
 	}
 	
 	@PostMapping
-	public String processOrder(@Valid @ModelAttribute Order  order, Errors error, SessionStatus sessionStatus) {
+	public String processOrder(@Valid Order  order, Errors error, SessionStatus sessionStatus) {
 		log.info("Processing Order: ...");
 
 		if (error.hasErrors()) {
