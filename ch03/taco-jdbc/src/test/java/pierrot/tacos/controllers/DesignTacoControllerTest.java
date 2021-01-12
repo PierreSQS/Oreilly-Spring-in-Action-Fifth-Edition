@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -104,13 +105,15 @@ class DesignTacoControllerTest {
 	@Test
 	void testProcessTacoDesignWithoutIngredients() throws Exception {
 		mockMvc.perform(post("/design"))		
-//		              .andDo(print())
+		              .andDo(print())
 		              // Show design view since no Ingredients checked
 		              .andExpect(view().name("design"))
 		              // We display the title of the design view
 		              .andExpect(content().string(containsString("<title>Taco Cloud JDBC</title>")))
 		              // Display the error message since no Ingredient
-		              .andExpect(content().string(containsString("You must choose at least 1 ingredient"))); 
+		              .andExpect(content().string(containsString("You must choose at least 1 ingredient")))
+		              // more accurate for this Test
+		              .andExpect(model().hasErrors()); 
 	}
 	
 	@Test
