@@ -29,7 +29,7 @@ public class OrderController {
 	}
 
 	@GetMapping("/current")
-	public String orderForm(Model model) {
+	public String orderForm(Order order) {
 		return "orderForm";
 	}
 	
