@@ -1,7 +1,10 @@
 package pierrot.tacos.controllers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import org.junit.jupiter.api.AfterAll;
@@ -52,6 +55,19 @@ class OrderControllerTest {
 		mockMvc.perform(get("/orders/current"))
 		    .andDo(print())
 		    .andExpect(view().name("orderForm"));
+	}
+	
+	@Test
+	public void testSubmitOrderFormWithFieldEmpty() throws Exception {
+		mockMvc.perform(post("/orders"))
+			.andDo(print())
+			// We stay on Order Form since validation errors
+			.andExpect(view().name("orderForm"))
+			// Thus model has errors
+			.andExpect(model().hasErrors())
+			// We receive an HTTP Code = 200 since 
+			// we get back the form instead of a redirect
+			.andExpect(status().isOk());
 	}
 
 }
