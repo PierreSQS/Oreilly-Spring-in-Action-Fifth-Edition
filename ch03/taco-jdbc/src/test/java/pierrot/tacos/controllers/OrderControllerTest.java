@@ -14,12 +14,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import lombok.extern.slf4j.Slf4j;
-import pierrot.tacos.domain.Order;
 import pierrot.tacos.repositories.IngredientRepository;
 import pierrot.tacos.repositories.OrderRepository;
 
-@Slf4j
 @WebMvcTest(controllers = {OrderController.class})
 class OrderControllerTest {
 	
@@ -28,8 +25,6 @@ class OrderControllerTest {
 	
 	@MockBean
 	OrderRepository orderRepoMock;
-	
-	private Order order;
 	
 	// this Mock is not really used, but is
 	// only needed to instantiate the Converter (IngredientByIdConverter) 
