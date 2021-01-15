@@ -3,10 +3,13 @@ package pierrot.tacos.domain;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Data
+@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
 @RequiredArgsConstructor
 @Entity
 public class Ingredient {
