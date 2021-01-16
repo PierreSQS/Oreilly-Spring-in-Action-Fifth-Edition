@@ -9,9 +9,10 @@ import pierrot.tacos.repositories.IngredientRepository;
 
 
 /**
- * This Class converts the ingredients ids e.g [FLTO,CARN,CHED,LETC,SLSA]
- * coming from the Taco Form * as String to Ingredients coming from
- * the Database
+ * This Class converts the ingredients IDs e.g [FLTO,CARN,CHED,LETC,SLSA]
+ * coming from the selected checkboxes on the Taco Form as String 
+ * to Ingredients POJOs. Before converting the IDs, the convert-Method
+ * checks whether the ID Ingredient exists in the DB.
  * @author PierreSQS
  *
  */
