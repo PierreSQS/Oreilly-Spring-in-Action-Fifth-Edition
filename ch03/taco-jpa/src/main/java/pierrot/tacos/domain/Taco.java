@@ -8,12 +8,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.PrePersist;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 @Data
+@Slf4j
 @Entity
 public class Taco {
 
@@ -30,4 +33,9 @@ public class Taco {
 	@ManyToMany(targetEntity = Ingredient.class)
 	private List<Ingredient> ingredients;
 
+	@PrePersist
+	void created() {
+		log.info("Persisting Taco creation's date");
+		createdAt = LocalDateTime.now();
+	}
 }

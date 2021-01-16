@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
@@ -18,8 +19,10 @@ import org.hibernate.validator.constraints.CreditCardNumber;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Data
+@Slf4j
 @NoArgsConstructor
 @Entity
 @Table(name = "Taco_Order")
@@ -59,6 +62,12 @@ public class Order {
 
 	public void addTacoDesign(Taco tacoDesign) {
 		tacos.add(tacoDesign);
+	}
+	
+	@PrePersist
+	void created() {
+		log.info("Persisting Order creation's Date");
+		placedAt = LocalDateTime.now();
 	}
 
 }
