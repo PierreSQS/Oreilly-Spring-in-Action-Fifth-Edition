@@ -47,7 +47,8 @@ public class DesignTacoController {
 	}
 	
 	// this replace the formal ModelAttribute
-	// in the controller
+	// design in DesignTacoController.showDesignForm().
+	// (s. Controller in chap01 at line 47
 	@ModelAttribute(name = "taco")
 	public Taco taco() {
 		log.info("creating ModeAttribute Taco");
