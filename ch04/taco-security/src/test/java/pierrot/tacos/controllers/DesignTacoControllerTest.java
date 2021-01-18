@@ -96,14 +96,17 @@ class DesignTacoControllerTest {
 	// This test must be the first to avoid a NPE in test below!!!
 	@Order(1) 
 	public void testShowDesignForm() throws Exception {
-		mockMvc.perform(get("/design")).andDo(print()).andExpect(status().isOk())
+		mockMvc.perform(get("/design"))
+				.andDo(print())
+				.andExpect(status().isOk())
 				.andExpect(content().string(containsString("<title>Taco Cloud Security</title>")))
 				.andExpect(view().name("design"));
 	}
 
 	@Test
 	public void testProcessTacoDesignWithoutIngredients() throws Exception {
-		mockMvc.perform(post("/design")).andDo(print())
+		mockMvc.perform(post("/design"))
+				.andDo(print())
 				// Show design view since no Ingredients checked
 				.andExpect(view().name("design"))
 				// We display the title of the design view
