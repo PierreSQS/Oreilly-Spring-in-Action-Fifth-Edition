@@ -34,6 +34,8 @@ public class DesignTacoController {
 	
 	private final TacoRepository tacoRepo;
 	
+	private Map<Type, List<Ingredient>> ingredientsByType;
+	
 	public DesignTacoController(IngredientRepository ingredientRepo, TacoRepository tacoRepo) {
 		super();
 		this.ingredientRepo = ingredientRepo;
@@ -61,7 +63,7 @@ public class DesignTacoController {
 		List<Ingredient> ingredients = (List<Ingredient>) ingredientRepo.findAll();
 		
 		// Group the ingredients by type in a list, and put the results in a Map
-		Map<Type, List<Ingredient>> ingredientsByType =
+		ingredientsByType =
 				ingredients.stream().collect(groupingBy(Ingredient::getType));
 		
 		// iterate through the Map and set the model attributes for the checkbox
@@ -72,11 +74,14 @@ public class DesignTacoController {
 	}
 	
 	@PostMapping
-	public String processDesign(@Valid Taco taco, Errors error, @ModelAttribute Order order) {
+	public String processDesign(@Valid Taco taco, Errors error, @ModelAttribute Order order, Model model) {
 		log.info("Processing Taco {}...", taco);
 
 		if (error.hasErrors()) {
 			log.info("Error Handling in processing Taco {}", taco);
+			// iterate through the Map and set the model attributes for the checkbox
+			ingredientsByType.forEach((type, ingredList) 
+					-> {model.addAttribute(type.toString().toLowerCase(),ingredList);});
 			return "design";
 		}
 
