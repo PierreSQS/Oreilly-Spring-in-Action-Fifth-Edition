@@ -88,9 +88,13 @@ class DesignTacoControllerTest {
 	}
 
 	@Test 
-	// The accuracy of this test must be checked
-	public void testShowDesignFormWithoutModelAttributes() throws Exception {
-		mockMvc.perform(get("/design")).andDo(print()).andExpect(status().isOk())
+	// adapted the Name because the first name was a non-sens!!!
+	// the model-attributes are mocked in setUp()-method!!!!
+	// attributes are just expected, not set in this case!!!
+	public void testShowDesignForm() throws Exception {
+		mockMvc.perform(get("/design"))
+				.andDo(print())
+				.andExpect(status().isOk())
 				.andExpect(content().string(containsString("<title>Taco Cloud JPA</title>")))
 				.andExpect(view().name("design"));
 	}
