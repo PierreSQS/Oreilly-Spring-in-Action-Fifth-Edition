@@ -38,7 +38,7 @@ class HomeControllerTest {
 			.andDo(print())
 			.andExpect(status().isOk())
 			.andExpect(view().name("home"))
-			.andExpect(content().string(containsString("Taco Cloud JPA")));
+			.andExpect(content().string(containsString("Taco Cloud Security")));
 	}
 
 }

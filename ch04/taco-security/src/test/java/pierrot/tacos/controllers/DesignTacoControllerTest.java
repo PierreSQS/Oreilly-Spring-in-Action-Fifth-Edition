@@ -2,10 +2,10 @@ package pierrot.tacos.controllers;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -20,6 +20,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -33,6 +36,7 @@ import pierrot.tacos.repositories.IngredientRepository;
 import pierrot.tacos.repositories.TacoRepository;
 
 @WebMvcTest(DesignTacoController.class)
+@TestMethodOrder(OrderAnnotation.class)
 class DesignTacoControllerTest {
 
 	@Autowired
@@ -80,7 +84,6 @@ class DesignTacoControllerTest {
 		design = new Taco();
 		design.setName("Test Taco");
 
-		;
 	}
 
 	@AfterEach
@@ -89,13 +92,12 @@ class DesignTacoControllerTest {
 
 	@Test 
 	// adapted the Name because the first name was a non-sens!!!
-	// the model-attributes are mocked in setUp()-method!!!!
-	// attributes are just expected, not set in this case!!!
+	// the model-attributes are set in setUp()-method!!!!
+	// This test must be the first to avoid a NPE in test below!!!
+	@Order(1) 
 	public void testShowDesignForm() throws Exception {
-		mockMvc.perform(get("/design"))
-				.andDo(print())
-				.andExpect(status().isOk())
-				.andExpect(content().string(containsString("<title>Taco Cloud JPA</title>")))
+		mockMvc.perform(get("/design")).andDo(print()).andExpect(status().isOk())
+				.andExpect(content().string(containsString("<title>Taco Cloud Security</title>")))
 				.andExpect(view().name("design"));
 	}
 
@@ -105,7 +107,7 @@ class DesignTacoControllerTest {
 				// Show design view since no Ingredients checked
 				.andExpect(view().name("design"))
 				// We display the title of the design view
-				.andExpect(content().string(containsString("<title>Taco Cloud JPA</title>")))
+				.andExpect(content().string(containsString("<title>Taco Cloud Security</title>")))
 				// Display the error message since no Ingredient
 				.andExpect(content().string(containsString("You must choose at least 1 ingredient")))
 				// more accurate for this Test
