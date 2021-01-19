@@ -34,14 +34,10 @@ public class DesignTacoController {
 	
 	private final TacoRepository tacoRepo;
 	
-	private final List<Ingredient> ingredients;
-	
 	public DesignTacoController(IngredientRepository ingredientRepo, TacoRepository tacoRepo) {
 		super();
 		this.ingredientRepo = ingredientRepo;
 		this.tacoRepo = tacoRepo;
-		// fetch the ingredients from the Database
-		ingredients = (List<Ingredient>) ingredientRepo.findAll();
 	}
 	
 	@ModelAttribute(name = "order")
@@ -59,8 +55,11 @@ public class DesignTacoController {
 	
 	@ModelAttribute
 	public void populateViewWithIngredients(Model model) {
-		// Group the ingredients by type in a list, and put the results in a Map
 		log.info("populating Model with ingredients...");
+		// fetch the ingredients from the Database
+		List<Ingredient> ingredients = (List<Ingredient>) ingredientRepo.findAll();
+		
+		// Group the ingredients by type in a list, and put the results in a Map
 		Map<Type, List<Ingredient>>ingredientsByType = 
 				ingredients.stream().collect(groupingBy(Ingredient::getType));
 
