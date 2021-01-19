@@ -34,42 +34,44 @@ public class DesignTacoController {
 	
 	private final TacoRepository tacoRepo;
 	
-	private Map<Type, List<Ingredient>> ingredientsByType;
+	private final List<Ingredient> ingredients;
 	
 	public DesignTacoController(IngredientRepository ingredientRepo, TacoRepository tacoRepo) {
 		super();
 		this.ingredientRepo = ingredientRepo;
 		this.tacoRepo = tacoRepo;
+		// fetch the ingredients from the Database
+		ingredients = (List<Ingredient>) ingredientRepo.findAll();
 	}
 	
 	@ModelAttribute(name = "order")
 	public Order order() {
-		log.info("creating ModeAttribute Order");
+		log.info("creating ModeAttribute Order...");
 		return new Order();
 	}
 	
-	// this replace the formal ModelAttribute
-	// design in DesignTacoController.showDesignForm().
-	// (s. Controller in chap01 at line 47
+
 	@ModelAttribute(name = "taco")
 	public Taco taco() {
-		log.info("creating ModeAttribute Taco");
+		log.info("creating ModeAttribute Taco...");
 		return new Taco();
+	}
+	
+	@ModelAttribute
+	public void populateViewWithIngredients(Model model) {
+		// Group the ingredients by type in a list, and put the results in a Map
+		log.info("populating Model with ingredients...");
+		Map<Type, List<Ingredient>>ingredientsByType = 
+				ingredients.stream().collect(groupingBy(Ingredient::getType));
+
+		// iterate through the Map and set the model attributes for the check box
+		ingredientsByType.forEach((type, ingredList) -> {
+			model.addAttribute(type.toString().toLowerCase(), ingredList);
+		});
 	}
 	  
 	@GetMapping
 	public String showDesignForm(Model model) {
-		// fetch the ingredients from the Database
-		List<Ingredient> ingredients = (List<Ingredient>) ingredientRepo.findAll();
-		
-		// Group the ingredients by type in a list, and put the results in a Map
-		ingredientsByType =
-				ingredients.stream().collect(groupingBy(Ingredient::getType));
-		
-		// iterate through the Map and set the model attributes for the checkbox
-		ingredientsByType.forEach((type, ingredList) 
-				-> {model.addAttribute(type.toString().toLowerCase(),ingredList);});
-		
 		return "design";
 	}
 	
@@ -79,9 +81,6 @@ public class DesignTacoController {
 
 		if (error.hasErrors()) {
 			log.info("Error Handling in processing Taco {}", taco);
-			// iterate through the Map and set the model attributes for the checkbox
-			ingredientsByType.forEach((type, ingredList) 
-					-> {model.addAttribute(type.toString().toLowerCase(),ingredList);});
 			return "design";
 		}
 

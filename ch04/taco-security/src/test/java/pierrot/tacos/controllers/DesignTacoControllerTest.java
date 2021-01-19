@@ -20,9 +20,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.junit.jupiter.api.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -36,7 +33,6 @@ import pierrot.tacos.repositories.IngredientRepository;
 import pierrot.tacos.repositories.TacoRepository;
 
 @WebMvcTest(DesignTacoController.class)
-@TestMethodOrder(OrderAnnotation.class)
 class DesignTacoControllerTest {
 
 	@Autowired
@@ -91,10 +87,6 @@ class DesignTacoControllerTest {
 	}
 
 	@Test 
-	// adapted the Name because the first name was a non-sens!!!
-	// the model-attributes are set in setUp()-method!!!!
-	// This test must be the first to avoid a NPE in test below!!!
-	@Order(1) 
 	public void testShowDesignForm() throws Exception {
 		mockMvc.perform(get("/design"))
 				.andDo(print())
@@ -134,7 +126,7 @@ class DesignTacoControllerTest {
 
 		mockMvc.perform(post("/design")
 //					.content("name=Test+Taco&ingredients=FLTO,GRBF,CHED")
-					.param("name", "Test Taco")
+					.param("name", "Test Taco2")
 					.param("ingredients", "FLTO", "GRBF", "CHED")
 					.contentType(MediaType.APPLICATION_FORM_URLENCODED))
 				.andDo(print())

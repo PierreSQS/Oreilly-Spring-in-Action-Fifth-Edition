@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import lombok.extern.slf4j.Slf4j;
 import pierrot.tacos.domain.Ingredient;
 import pierrot.tacos.repositories.IngredientRepository;
 
@@ -17,6 +18,7 @@ import pierrot.tacos.repositories.IngredientRepository;
  *
  */
 @Component
+@Slf4j
 public class IngredientByIdConverter implements Converter<String, Ingredient> {
 
 	private IngredientRepository ingreRepo;
@@ -29,6 +31,7 @@ public class IngredientByIdConverter implements Converter<String, Ingredient> {
 
 	@Override
 	public Ingredient convert(String id) {
+		log.info("Converting Ingredient...");
 		return ingreRepo.findById(id).orElse(null);
 	}
 
