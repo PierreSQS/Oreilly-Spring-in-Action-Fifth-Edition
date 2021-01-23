@@ -33,11 +33,15 @@ public class DesignTacoController {
 	private final IngredientRepository ingredientRepo;
 	
 	private final TacoRepository tacoRepo;
+
+	private final List<Ingredient> ingredients;
 	
 	public DesignTacoController(IngredientRepository ingredientRepo, TacoRepository tacoRepo) {
 		super();
 		this.ingredientRepo = ingredientRepo;
 		this.tacoRepo = tacoRepo;
+		// fetch the ingredients from the Database
+		ingredients = (List<Ingredient>) ingredientRepo.findAll();
 	}
 	
 	@ModelAttribute(name = "order")
@@ -54,24 +58,26 @@ public class DesignTacoController {
 		return new Taco();
 	}
 	  
+	@ModelAttribute
+	public void populateViewWithIngredients(Model model) {
+		// Group the ingredients by type in a list, and put the results in a Map
+		log.info("populating Model with ingredients...");
+		Map<Type, List<Ingredient>>ingredientsByType = 
+				ingredients.stream().collect(groupingBy(Ingredient::getType));
+
+		// iterate through the Map and set the model attributes for the check box
+		ingredientsByType.forEach((type, ingredList) -> {
+			model.addAttribute(type.toString().toLowerCase(), ingredList);
+		});
+	}
+	
 	@GetMapping
 	public String showDesignForm(Model model) {
-		// fetch the ingredients from the Database
-		List<Ingredient> ingredients = (List<Ingredient>) ingredientRepo.findAll();
-		
-		// Group the ingredients by type in a list, and put the results in a Map
-		Map<Type, List<Ingredient>> ingredientsByType =
-				ingredients.stream().collect(groupingBy(Ingredient::getType));
-		
-		// iterate through the Map and set the model attributes for the checkbox
-		ingredientsByType.forEach((type, ingredList) 
-				-> {model.addAttribute(type.toString().toLowerCase(),ingredList);});
-		
 		return "design";
 	}
 	
 	@PostMapping
-	public String processDesign(@Valid Taco taco, Errors error, @ModelAttribute Order order) {
+	public String processDesign(@Valid Taco taco, Errors error, @ModelAttribute Order order, Model model) {
 		log.info("Processing Taco {}...", taco);
 
 		if (error.hasErrors()) {
