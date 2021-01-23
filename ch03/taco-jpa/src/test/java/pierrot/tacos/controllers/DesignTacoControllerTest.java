@@ -1,6 +1,7 @@
 package pierrot.tacos.controllers;
 
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -10,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,13 +36,10 @@ import pierrot.tacos.repositories.TacoRepository;
 
 class DesignTacoControllerTest {
 
-	@Autowired
 	private MockMvc mockMvc;
 
-	@MockBean
 	private IngredientRepository ingredRepoMock;
 
-	@MockBean
 	private TacoRepository tacoRepoMock;
 
 	private List<Ingredient> ingredients;
@@ -57,6 +56,7 @@ class DesignTacoControllerTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
+		ingredRepoMock = mock(IngredientRepository.class);
 		ingredients = Arrays.asList(new Ingredient("FLTO", "Flour Tortilla", Type.WRAP),
 				new Ingredient("COTO", "Corn Tortilla", Type.WRAP), 
 				new Ingredient("GRBF", "Ground Beef", Type.PROTEIN),
@@ -75,6 +75,8 @@ class DesignTacoControllerTest {
 		when(ingredRepoMock.findById("JACK")).thenReturn(Optional.of(new Ingredient("JACK", "Monterrey Jack", Type.CHEESE)));
 
 		when(ingredRepoMock.findById("LETC")).thenReturn(Optional.of(new Ingredient("LETC", "Lettuce", Type.VEGGIES)));
+		
+		mockMvc = standaloneSetup(new DesignTacoController(ingredRepoMock, tacoRepoMock)).build();
 
 		design = new Taco();
 		design.setName("Test Taco");
