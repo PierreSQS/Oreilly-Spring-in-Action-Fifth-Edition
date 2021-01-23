@@ -57,6 +57,8 @@ class DesignTacoControllerTest {
 	@BeforeEach
 	void setUp() throws Exception {
 		ingredRepoMock = mock(IngredientRepository.class);
+		tacoRepoMock = mock(TacoRepository.class);
+		
 		ingredients = Arrays.asList(new Ingredient("FLTO", "Flour Tortilla", Type.WRAP),
 				new Ingredient("COTO", "Corn Tortilla", Type.WRAP), 
 				new Ingredient("GRBF", "Ground Beef", Type.PROTEIN),
