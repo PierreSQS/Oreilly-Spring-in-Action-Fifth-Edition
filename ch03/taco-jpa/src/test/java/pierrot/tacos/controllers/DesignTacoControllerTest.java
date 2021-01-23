@@ -32,7 +32,6 @@ import pierrot.tacos.domain.Taco;
 import pierrot.tacos.repositories.IngredientRepository;
 import pierrot.tacos.repositories.TacoRepository;
 
-@WebMvcTest(DesignTacoController.class)
 class DesignTacoControllerTest {
 
 	@Autowired
