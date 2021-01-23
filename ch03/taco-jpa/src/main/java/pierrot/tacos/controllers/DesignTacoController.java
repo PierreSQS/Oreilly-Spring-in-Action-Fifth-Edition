@@ -27,7 +27,7 @@ import pierrot.tacos.repositories.TacoRepository;
 @Slf4j
 @Controller
 @SessionAttributes("order")
-@RequestMapping("/design")
+@RequestMapping("/design1")
 public class DesignTacoController {
 	
 	private final IngredientRepository ingredientRepo;

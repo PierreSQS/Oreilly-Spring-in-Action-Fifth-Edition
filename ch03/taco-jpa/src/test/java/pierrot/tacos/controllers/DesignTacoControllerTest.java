@@ -93,7 +93,7 @@ class DesignTacoControllerTest {
 	@Test 
 	// The accuracy of this test must be checked
 	public void testShowDesignFormWithoutModelAttributes() throws Exception {
-		mockMvc.perform(get("/design")).andDo(print()).andExpect(status().isOk())
+		mockMvc.perform(get("/design1")).andDo(print()).andExpect(status().isOk())
 				.andExpect(content().string(containsString("<title>Taco Cloud JPA</title>")))
 				.andExpect(model().attribute("wrap", ingredients.subList(0, 2)))
 				.andExpect(model().attribute("protein", ingredients.subList(2, 4)))
@@ -105,7 +105,7 @@ class DesignTacoControllerTest {
 
 	@Test
 	public void testProcessTacoDesignWithoutIngredients() throws Exception {
-		mockMvc.perform(post("/design")).andDo(print())
+		mockMvc.perform(post("/design1")).andDo(print())
 				// Show design view since no Ingredients checked
 				.andExpect(view().name("design"))
 				// We display the title of the design view
@@ -120,7 +120,7 @@ class DesignTacoControllerTest {
 	public void testProcessTacoDesignWitIngredients() throws Exception {
 		when(tacoRepoMock.save(design)).thenReturn(design);
 
-		mockMvc.perform(post("/design").content("name=Test+Taco&ingredients=FLTO,GRBF,CHED")
+		mockMvc.perform(post("/design1").content("name=Test+Taco&ingredients=FLTO,GRBF,CHED")
 					.contentType(MediaType.APPLICATION_FORM_URLENCODED))
 				.andDo(print())
 				.andExpect(status().is3xxRedirection())
@@ -131,7 +131,7 @@ class DesignTacoControllerTest {
 	public void testProcessTacoDesignWitIngredientsParams() throws Exception {
 		when(tacoRepoMock.save(design)).thenReturn(design);
 
-		mockMvc.perform(post("/design")
+		mockMvc.perform(post("/design1")
 //					.content("name=Test+Taco&ingredients=FLTO,GRBF,CHED")
 					.param("name", "Test Taco")
 					.param("ingredients", "FLTO", "GRBF", "CHED")
