@@ -92,6 +92,11 @@ class DesignTacoControllerTest {
 	public void testShowDesignFormWithoutModelAttributes() throws Exception {
 		mockMvc.perform(get("/design")).andDo(print()).andExpect(status().isOk())
 				.andExpect(content().string(containsString("<title>Taco Cloud JPA</title>")))
+				.andExpect(model().attribute("wrap", ingredients.subList(0, 2)))
+				.andExpect(model().attribute("protein", ingredients.subList(2, 4)))
+				.andExpect(model().attribute("veggies", ingredients.subList(4, 6)))
+				.andExpect(model().attribute("cheese", ingredients.subList(6, 8)))
+				.andExpect(model().attribute("sauce", ingredients.subList(8, 10)))
 				.andExpect(view().name("design"));
 	}
 
