@@ -1,6 +1,5 @@
 package pierrot.tacos.controllers;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -12,8 +11,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -22,8 +19,10 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import pierrot.tacos.domain.Ingredient;
@@ -32,13 +31,16 @@ import pierrot.tacos.domain.Taco;
 import pierrot.tacos.repositories.IngredientRepository;
 import pierrot.tacos.repositories.TacoRepository;
 
-@Disabled("Manual Mocking is not reliable!!1")
-class DesignTacoControllerTest {
+@WebMvcTest(controllers = {DesignTacoController.class})
+class DesignTacoControllerWithAnnotationTest {
 
+	@Autowired
 	private MockMvc mockMvc;
 
+	@MockBean
 	private IngredientRepository ingredRepoMock;
 
+	@MockBean
 	private TacoRepository tacoRepoMock;
 
 	private List<Ingredient> ingredients;
@@ -79,12 +81,6 @@ class DesignTacoControllerTest {
 		
 		design = new Taco();
 		design.setName("Test Taco");
-		design.setIngredients(ingredients);
-		
-		when(tacoRepoMock.save(any())).thenReturn(design);
-		
-		mockMvc = standaloneSetup(new DesignTacoController(ingredRepoMock, tacoRepoMock)).build();
-
 
 	}
 
@@ -93,15 +89,10 @@ class DesignTacoControllerTest {
 	}
 
 	@Test 
-	// The accuracy of this test must be checked
 	public void testShowDesignFormWithoutModelAttributes() throws Exception {
 		mockMvc.perform(get("/design1")).andDo(print()).andExpect(status().isOk())
 				.andExpect(content().string(containsString("<title>Taco Cloud JPA</title>")))
-				.andExpect(model().attribute("wrap", ingredients.subList(0, 2)))
-				.andExpect(model().attribute("protein", ingredients.subList(2, 4)))
-				.andExpect(model().attribute("veggies", ingredients.subList(4, 6)))
-				.andExpect(model().attribute("cheese", ingredients.subList(6, 8)))
-				.andExpect(model().attribute("sauce", ingredients.subList(8, 10)))
+				.andExpect(model().attributeDoesNotExist("wrap", "protein", "veggies", "cheese", "sauce"))
 				.andExpect(view().name("design"));
 	}
 
@@ -134,7 +125,7 @@ class DesignTacoControllerTest {
 		when(tacoRepoMock.save(design)).thenReturn(design);
 
 		mockMvc.perform(post("/design1")
-					.content("name=Test+Taco&ingredients=FLTO,GRBF,CHED")
+//					.content("name=Test+Taco&ingredients=FLTO,GRBF,CHED")
 					.param("name", "Test Taco")
 					.param("ingredients", "FLTO", "GRBF", "CHED")
 					.contentType(MediaType.APPLICATION_FORM_URLENCODED))
